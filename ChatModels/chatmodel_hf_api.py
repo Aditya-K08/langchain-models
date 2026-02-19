@@ -1,12 +1,18 @@
-from langchain_huggingface import HuggingFaceEndpoint
 from dotenv import load_dotenv
+from langchain_huggingface import HuggingFaceEndpoint, ChatHuggingFace
+from langchain_core.messages import HumanMessage
 
 load_dotenv()
 
 llm = HuggingFaceEndpoint(
-    repo_id="TinyLlama/TinyLlama-1.1B-Chat-v1.0",
-    task="text-generation",
+    repo_id="deepseek-ai/DeepSeek-R1-0528",
+    task="conversational", 
+    provider="novita",   
+    max_new_tokens=256,
+    temperature=0.5,
 )
 
-result = llm.invoke("What is the capital of India?")
-print(result)
+chat = ChatHuggingFace(llm=llm)
+
+resp = chat.invoke([HumanMessage(content="Who won the FIFA World Cup in 1994?")])
+print(resp.content)
